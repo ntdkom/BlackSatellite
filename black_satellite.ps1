@@ -160,7 +160,7 @@ foreach ($ou in $admOUs)
                 Write-Output "$($admt.name)`t`t$($admt.SID)"
                 try 
                 {
-                    $repdata = Get-ADReplAccount -SamAccountName $admt.samaccountname -Domain $dname -Server $dc.HostName -Protocol TCP
+                    $repdata = Get-ADReplAccount -SamAccountName $admt.samaccountname -Domain $dname -Server $($dc.HostName) -Protocol TCP
                     $objAverage = New-Object System.Object
                     $objAverage | Add-Member -type NoteProperty -name DN -value $($repdata.DistinguishedName)
                     $objAverage | Add-Member -type NoteProperty -name NTHash -value $(($repdata.NTHash | ConvertTo-Hex) -join "")
@@ -242,7 +242,7 @@ if ($ProcessTrustingDomains)
                             Write-Output "-------------------------------------------------------------------------------"
                             Write-Output "$($admt.name)`t`t$($admt.SID)"
                             try {
-                                $repdata = Get-ADReplAccount -SamAccountName $admt.samaccountname -Domain $dname -Server $dc.HostName -Protocol TCP
+                                $repdata = Get-ADReplAccount -SamAccountName $admt.samaccountname -Domain $dname -Server $($dc.HostName) -Protocol TCP
                                 $objAverage = New-Object System.Object
                                 $objAverage | Add-Member -type NoteProperty -name DN -value $($repdata.DistinguishedName)
                                 $objAverage | Add-Member -type NoteProperty -name NTHash -value $(($repdata.NTHash | ConvertTo-Hex) -join "")
@@ -341,7 +341,7 @@ Write-Verbose -Message "Saving results."
 try
 {
     $all | ft -AutoSize
-    [string]$fileName = $OutputFolderPath + "/violations_" + (Get-Date -Format s).Replace(":","_") + ".csv"
+    [string]$fileName = $OutputFolderPath + "\violations_" + (Get-Date -Format s).Replace(":","_") + ".csv"
     $all | Export-Csv -Path $fileName -NoTypeInformation
     Write-Verbose -Message "All done! Check: $fileName"
 }

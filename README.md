@@ -1,4 +1,4 @@
-# BlackSatellite
+# Black Satellite
 
 This PowerShell script allows you to hunt for the password reuse in your Active Directory installation.
 
@@ -18,3 +18,11 @@ Why? Because 'The NT hash of the password is calculated by using an unsalted MD4
 Reference: https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/hh994565(v=ws.11)
 
 Hence, two identical passwords will have identical NT hash.
+
+## How it works
+
+The script uses the DSInternals PowerShell module to extract the authentication information from the ADDS.
+
+One of the mandatory arguments is the name of the organizational unit to pull users from.
+Only users with the administrative permissions (either members of: Builtin Administrators or Domain Administrators or Enterprise Administrators)
+are checked.
