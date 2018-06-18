@@ -5,10 +5,16 @@ This PowerShell script allows you to hunt for the password reuse in your Active 
 ## Concept
 
 There should be no identical passwords in the your infrastructure, especially in the production environment.
+
 If one (or many more) of your Sysdmins has a single password for his corp account (email, chat, workstation)
 and his administrative account in production - you've got problems.
+
 Since there's no easy way to obtain plain-text passwords for all of your users reliably, another approach can be used.
+
 Password's hash can be used as a clear representation of a password string.
+
 Why? Because 'The NT hash of the password is calculated by using an unsalted MD4 hash algorithm.'
+
 Reference: https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/hh994565(v=ws.11)
+
 Hence, two identical passwords will have identical NT hash.
