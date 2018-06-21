@@ -6,13 +6,13 @@ Imagine sysadmin with the single password for all his admin accounts in differen
 The only accounts that are checked - the ones with the administrative permissions in a given domain.
 
 Required Dependencies: ActiveDirectory PowerShell module, DSInternals PowerShell module
-Required permissions: Replicate Directory changes All
+Required permissions: DS-Replication-Get-Changes, DS-Replication-Get-Changes-All
 
 .DESCRIPTION
 
-The script loads the necessary modules, obtains the current Active Directory forest`s root domain and optionally all the trusting forests
-(in case you use the management model with the single admin forest). It then pulls administrative accounts from the current forest
-and optionally from the trusting forests. For each admin account it obtains the following data:
+The script loads the necessary modules, obtains the current Active Directory forest`s root domain and optionally all the trusting forests`
+root domains (in case you use the management model with the single admin forest). It then pulls administrative accounts from the current forest
+and optionally from the trusting forests` root domains. For each admin account it obtains the following data:
     - DistinguishedName
     - NTHash
     - LMHash
@@ -20,10 +20,10 @@ and optionally from the trusting forests. For each admin account it obtains the 
     - Enabled
     - LastLogonDate
 On the next step, script detects if there are the following violations:
-    - password reuse
+    - password reuse (according to NTHash value)
     - LMHash is not empty (you shouldn't have LMhashes enabled)
     - ClearText is not empty (you shoudn't store passwords of the admin accounts in the decryptable format!)
-The results are save to the CSV file which can be processed by any SIEM system.
+The results are saved to the CSV file which can be processed by any SIEM system.
 
 
 .PARAMETER OutputFolderPath
@@ -32,7 +32,7 @@ The results are save to the CSV file which can be processed by any SIEM system.
 
 .PARAMETER AdminOUNamePattern
 
-[string] Name of the AD OU which contain admin accounts.
+[string] Name of the AD organizational unit which contains admin accounts.
 
 .PARAMETER ProcessTrustingDomains
 
@@ -52,13 +52,13 @@ PS C:\GIT\Personal> .\black_satellite.ps1 -OutputFolderPath C:\reports\ -AdminOU
 
 Description
 -----------
-Instructs the script to obtain admin accounts from the "Privileged accounts" OU in the current forest and all its trusting forests,
+Instructs the script to obtain admin accounts from the "Privileged accounts" OU in the current forest as well as from the trusting forests` root domains,
  save results to the CSV in C:\reports
 
 .NOTES
 
-This script requires 'Replicate Directory changes All' permissions in all domains that you are going to work with.
-All magic with extracting passowrd hashes is performed by the wonderful DSInternals module:
+This script requires DS-Replication-Get-Changes and DS-Replication-Get-Changes-All permissions in all domains that you are going to work with.
+All magic with extracting passowrd hashes is done by the wonderful DSInternals module:
 https://www.powershellgallery.com/packages/DSInternals/2.22
 #>
 Param (
@@ -87,7 +87,7 @@ catch
 {
     throw "Cannot verify ActiveDirectory/DSInternals module $($_.Exception.Message)"
 }
-if (!$adm)
+if (!$adm -and !$dsi)
 {
     Write-Output "ActiveDirectory/DSInternals is not present. Will try to import it."
     try
