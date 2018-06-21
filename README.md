@@ -35,3 +35,6 @@ Pay attention that NTHash is only printend to the console if you use -Verbose sw
 The GUID value should be used to join the entries.
 
 <img src="screenshots/example1.png">
+
+## Acknowledgements
+* https://www.powershellgallery.com/packages/DSInternals/2.22
