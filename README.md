@@ -26,3 +26,12 @@ The script uses the DSInternals PowerShell module to extract the authentication 
 One of the mandatory arguments is the name of the organizational unit to pull users from.
 Only users with the administrative permissions (either members of: Builtin Administrators or Domain Administrators or Enterprise Administrators)
 are checked.
+
+## Example
+
+It the following example script detects identical password for three different accounts: paul, paul-a, paul-ea
+
+Pay attention that NTHash is only printend to the console if you use -Verbose switch.
+The GUID value should be used to join the entries.
+
+<img src="screenshots/example.png">
